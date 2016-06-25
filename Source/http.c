@@ -66,8 +66,7 @@ bool HTTP_SendPage(u8 con_id, u16 head_id, const u8* data, u16 len)
     {
         ESP8266_SendData(head->data, head->len);
         ESP8266_SendData(data, len);
-        ESP8266_SendConDataEnd();
-        return true;
+        return ESP8266_SendConDataEnd();
     }
     return false;
 }
@@ -125,7 +124,10 @@ bool HTTP_LineHandler(u8 con_id, char* str, u16 len)
         HtmlData_Type *page = HTML_Find(p_path, path_len);
         if(page)
         {
-            HTTP_SendPage(con_id, 200, page->data, page->len);
+            if(!HTTP_SendPage(con_id, 200, page->data, page->len))
+            {
+                HAL_Delay(100);
+            }
         }
         else
         {
@@ -133,7 +135,6 @@ bool HTTP_LineHandler(u8 con_id, char* str, u16 len)
             HTTP_SendPage(con_id, 404, page->data, page->len);
         }
 
-        HAL_Delay(100);
         ESP8266_CloseLink(con_id);
     }        
     return false;
