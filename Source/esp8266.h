@@ -25,7 +25,10 @@ bool ESP8266_MuxModeEnable(bool e);
 bool ESP8266_ServerEnable(bool e, u16 port);
 bool ESP8266_GetIP(u8 *pbuf, u8 size);
 bool ESP8266_GetData(CommData_Type *data);
-bool ESP8266_SendConData(u8 con_id, const u8 *pbuf, u16 len);
 bool ESP8266_CloseLink(u8 con_id);
+
+bool ESP8266_SendConDataBegin(u8 con_id, u16 len);
+bool ESP8266_SendConDataEnd(void);
+void ESP8266_SendData(const u8 *pbuf, u16 len);
 
 #endif

@@ -379,6 +379,8 @@ HAL_StatusTypeDef USER_UART_Transmit_DMA(UART_HandleTypeDef *huart, const uint8_
 */
 void ESP8266_SendData(const u8 *pbuf, u16 len)
 {
+    if(pbuf == NULL || len == 0) return;
+    
     while(USER_UART_Transmit_DMA(ESP_USART, pbuf, len) != HAL_OK) {}
 }
 
@@ -544,15 +546,53 @@ u8 IntToStr(u16 data, u8* str)
 * @param  con_id : 数据指针
 * @param  pbuf   : 数据指针
 * @param  len    : 数据长度
-* @retval None
+* @retval 是否成功
 */
-bool ESP8266_SendConData(u8 con_id, const u8 *pbuf, u16 len)
+//bool ESP8266_SendConData(u8 con_id, const u8 *pbuf, u16 len)
+//{
+//    static u8 cmd[] = "AT+CIPSEND=0,00000\r\n";
+//    u8 i;
+//    
+//    // 参数检查
+//    if(con_id < 10 && pbuf && len > 0)
+//    {
+//        cmd[11] = '0' + con_id;
+//        
+//        // 数据长度转字符串
+//        i = IntToStr(len, &cmd[13]) + 13;
+//        
+//        // 发送请求
+//        HandleMode = MODE_SEND;
+//        LastResponse = 0;
+//        ESP8266_SendData(cmd, i);
+//        
+//        if(!CheckResponse(RET_SEND, 1000))
+//        {
+//            HandleMode = MODE_CMD;
+//            return false;
+//        }
+//        
+//        // 发送数据
+//        ESP8266_SendData(pbuf, len);
+//        
+//        return CheckResponse(RET_SEND_OK, 3000);
+//    }
+//    return false;
+//}
+
+/**
+* @brief  ESP 模块开始向指定 socket 链接发送数据
+* @param  con_id : 数据指针
+* @param  len    : 数据长度
+* @retval 开始是否成功
+*/
+bool ESP8266_SendConDataBegin(u8 con_id, u16 len)
 {
     static u8 cmd[] = "AT+CIPSEND=0,00000\r\n";
     u8 i;
     
     // 参数检查
-    if(con_id < 10 && pbuf && len > 0)
+    if(con_id < 10 && len > 0)
     {
         cmd[11] = '0' + con_id;
         
@@ -569,13 +609,19 @@ bool ESP8266_SendConData(u8 con_id, const u8 *pbuf, u16 len)
             HandleMode = MODE_CMD;
             return false;
         }
-        
-        // 发送数据
-        ESP8266_SendData(pbuf, len);
-        
-        return CheckResponse(RET_SEND_OK, 3000);
+        return true;
     }
     return false;
+}
+
+/**
+* @brief  socket 发送数据结束
+* @param  None
+* @retval None
+*/
+bool ESP8266_SendConDataEnd(void)
+{
+    return CheckResponse(RET_SEND_OK, 3000);
 }
 
 bool ESP8266_CloseLink(u8 con_id)

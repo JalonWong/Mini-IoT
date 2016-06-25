@@ -9,6 +9,6 @@ typedef struct {
     u16 len;
 }HtmlData_Type;
 
-extern HtmlData_Type HtmlData[];
+HtmlData_Type* HTML_Find(char* name);
 
 #endif
