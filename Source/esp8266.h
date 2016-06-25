@@ -22,7 +22,7 @@ void ESP8266_Enable(bool e);
 bool ESP8266_SetWiFiMode(u8 mode);
 bool ESP8266_SetCipMode(bool e);
 bool ESP8266_MuxModeEnable(bool e);
-bool ESP8266_ServerEnable(bool e);
+bool ESP8266_ServerEnable(bool e, u16 port);
 bool ESP8266_GetIP(u8 *pbuf, u8 size);
 bool ESP8266_GetData(CommData_Type *data);
 bool ESP8266_SendConData(u8 con_id, const u8 *pbuf, u16 len);

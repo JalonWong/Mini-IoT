@@ -23,7 +23,7 @@
 #define RET_LINK_NOT    9
 
 typedef struct {
-    u8 *cmd;
+    char *cmd;
     u8 size;
     u8 retFlag;
 }CmdData_Type;
@@ -101,7 +101,7 @@ void ESP8266_Init(void)
     ret = ESP8266_SetCipMode(false);
     assert_param(ret);
     
-    ret = ESP8266_ServerEnable(true);
+    ret = ESP8266_ServerEnable(true, 80);
     assert_param(ret);
     
     //ESP8266_GetIP(IP_Data, sizeof(IP_Data));
@@ -508,6 +508,38 @@ void ESP8266_Task(void)
 // 接口函数
 
 /**
+* @brief  整形数据转字符串
+* @param  data : 整形数据
+* @param  pbuf : 字符串指针
+* @retval 字符串长度
+*/
+u8 IntToStr(u16 data, u8* str)
+{
+    u8 i, num;
+    u8 num_flag = 0;
+    u16 mask = 10000;
+    
+    for(i=0; i<5 && mask > 0;)
+    {
+        num = data / mask;
+        if(num || num_flag)
+        {
+            num_flag = 1;
+            
+            str[i++] = '0' + num;
+        }
+        
+        data = data % mask;
+        mask /= 10;
+    }
+    
+    str[i++] = '\r';
+    str[i++] = '\n';
+    
+    return i;
+}
+
+/**
 * @brief  ESP 模块向指定 socket 链接发送数据
 * @param  con_id : 数据指针
 * @param  pbuf   : 数据指针
@@ -517,9 +549,7 @@ void ESP8266_Task(void)
 bool ESP8266_SendConData(u8 con_id, const u8 *pbuf, u16 len)
 {
     static u8 cmd[] = "AT+CIPSEND=0,00000\r\n";
-    u8 i, num;
-    u8 num_flag = 0;
-    u16 mask = 10000, tmp_len = len;
+    u8 i;
     
     // 参数检查
     if(con_id < 10 && pbuf && len > 0)
@@ -527,22 +557,7 @@ bool ESP8266_SendConData(u8 con_id, const u8 *pbuf, u16 len)
         cmd[11] = '0' + con_id;
         
         // 数据长度转字符串
-        for(i=13; i<18 && mask > 0; )
-        {
-            num = len / mask;
-            if(num || num_flag)
-            {
-                num_flag = 1;
-                
-                cmd[i++] = '0' + num;
-            }
-            
-            len = len % mask;
-            mask /= 10;
-        }
-        
-        cmd[i++] = '\r';
-        cmd[i++] = '\n';
+        i = IntToStr(len, &cmd[13]) + 13;
         
         // 发送请求
         HandleMode = MODE_SEND;
@@ -556,7 +571,7 @@ bool ESP8266_SendConData(u8 con_id, const u8 *pbuf, u16 len)
         }
         
         // 发送数据
-        ESP8266_SendData(pbuf, tmp_len);
+        ESP8266_SendData(pbuf, len);
         
         return CheckResponse(RET_SEND_OK, 3000);
     }
@@ -622,15 +637,18 @@ bool ESP8266_MuxModeEnable(bool e)
     return CheckResponse(RET_OK, 0);
 }
 
-bool ESP8266_ServerEnable(bool e)
+bool ESP8266_ServerEnable(bool e, u16 port)
 {
-    static u8 cmd[] = "AT+CIPSERVER=1,8828\r\n";
+    static u8 cmd[] = "AT+CIPSERVER=1,00000\r\n";
+    u8 i;
     
     if(e) cmd[13] = '1';
     else cmd[13] = '0';
     
+    i = IntToStr(port, &cmd[15]) + 15;
+    
     LastResponse = 0;
-    ESP8266_SendData(cmd, sizeof(cmd));
+    ESP8266_SendData(cmd, i);
     return CheckResponse(RET_OK, 0);
 }
 
