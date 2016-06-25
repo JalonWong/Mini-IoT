@@ -108,7 +108,7 @@ bool HTTP_LineHandler(u8 con_id, char* str, u16 len)
         }
         
         // 参数处理
-        if(p_cmd && cmd_len > 0)
+        if(p_cmd)
         {
             ToggleLight();
         }

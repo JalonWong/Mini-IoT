@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>WiFi_Ctrl</TargetName>
+      <TargetName>MiniIoT</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <pCCUsed>5060061::V5.06 update 1 (build 61)::ARMCC</pCCUsed>
@@ -47,14 +47,14 @@
             <NotGenerated>0</NotGenerated>
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
-          <OutputDirectory>WiFi_Ctrl\</OutputDirectory>
-          <OutputName>WiFi_Ctrl</OutputName>
+          <OutputDirectory>MiniIoT\</OutputDirectory>
+          <OutputName>MiniIoT</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
-          <ListingPath>./WiFi_Ctrl/\</ListingPath>
+          <ListingPath>./MiniIoT/\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
           <CreateBatchFile>0</CreateBatchFile>
@@ -136,7 +136,7 @@
             <DriverSelection>4107</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
-          <Flash2>STLink\ST-LINKIII-KEIL_SWO.dll</Flash2>
+          <Flash2>BIN\UL2CM3.DLL</Flash2>
           <Flash3></Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
@@ -535,7 +535,7 @@
       <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="4.1.0" condition="CMSIS Core">
         <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="4.3.0"/>
         <targetInfos>
-          <targetInfo name="WiFi_Ctrl"/>
+          <targetInfo name="MiniIoT"/>
         </targetInfos>
       </component>
     </components>
