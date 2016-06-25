@@ -129,7 +129,8 @@ bool HTTP_LineHandler(u8 con_id, char* str, u16 len)
         }
         else
         {
-            HTTP_SendPage(con_id, 404, NULL, 0);
+            HtmlData_Type *page = HTML_Find("404.html", 8);
+            HTTP_SendPage(con_id, 404, page->data, page->len);
         }
 
         HAL_Delay(100);
