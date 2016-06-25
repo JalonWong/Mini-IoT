@@ -43,7 +43,22 @@
 /*----------------------------------------------------------------------------*/
 
 /* USER CODE BEGIN 1 */
+#if 1
+/** 
+  * Enable DMA controller clock
+  */
+void MX_DMA_Init(void) 
+{
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA1_CLK_ENABLE();
 
+  /* DMA interrupt init */
+  /* DMA1_Channel6_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel6_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel6_IRQn);
+
+}
+#else
 /* USER CODE END 1 */
 
 /** 
@@ -71,7 +86,7 @@ void MX_DMA_Init(void)
 }
 
 /* USER CODE BEGIN 2 */
-
+#endif
 /* USER CODE END 2 */
 
 /**

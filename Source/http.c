@@ -98,11 +98,11 @@ bool HTTP_LineHandler(u8 con_id, char* str, u16 len)
         HAL_Delay(100);
         
         // 路径处理
-        if(p_cmd || path_len > 1)
-        {
-            HTTP_SendHead(con_id, 204);
-        }
-        else
+//        if(p_cmd || path_len > 1)
+//        {
+//            HTTP_SendHead(con_id, 204);
+//        }
+//        else
         {
             //if(HTTP_SendHead(con_id, 200))
             {

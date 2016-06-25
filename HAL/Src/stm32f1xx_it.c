@@ -36,7 +36,10 @@
 #include "stm32f1xx_it.h"
 
 /* USER CODE BEGIN 0 */
+#include "esp8266.h"
+#include "control.h"
 
+bool USER_GPIO_EXTI_IRQHandler(uint16_t GPIO_Pin);
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
@@ -250,15 +253,66 @@ void DMA1_Channel7_IRQHandler(void)
 void USART2_IRQHandler(void)
 {
   /* USER CODE BEGIN USART2_IRQn 0 */
-
+#if 1
+    if(__HAL_UART_GET_FLAG(&huart2, UART_FLAG_IDLE) && __HAL_UART_GET_IT_SOURCE(&huart2, UART_IT_IDLE))
+    {
+        __HAL_UART_CLEAR_IDLEFLAG(&huart2);
+        ESP8266_RecvCallback(RECV_IDLE);
+    }
+#else
   /* USER CODE END USART2_IRQn 0 */
   HAL_UART_IRQHandler(&huart2);
   /* USER CODE BEGIN USART2_IRQn 1 */
-
+#endif
   /* USER CODE END USART2_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
+void HAL_SYSTICK_Callback(void)
+{
+    static u16 cnt = 0;
+    static u16 second_cnt = 0;
+    
+    ESP8266_Task();
+    INT_Task();
+    
+    if(++cnt >= 1000/200)
+    {
+        cnt = 0;
+        
+        if(++second_cnt >= 200/2)
+        {
+            second_cnt = 0;
+            HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+        }
+    }
+}
 
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+    if(huart == &huart2)
+    {
+        ESP8266_RecvCallback(RECV_CPLT);
+    }
+}
+
+void HAL_UART_RxHalfCpltCallback(UART_HandleTypeDef *huart)
+{
+    if(huart == &huart2)
+    {
+        ESP8266_RecvCallback(RECV_HALF);
+    }
+}
+
+bool USER_GPIO_EXTI_IRQHandler(uint16_t GPIO_Pin)
+{
+    /* EXTI line interrupt detected */
+    if(__HAL_GPIO_EXTI_GET_IT(GPIO_Pin) != RESET)
+    {
+        __HAL_GPIO_EXTI_CLEAR_IT(GPIO_Pin);
+        return true;
+    }
+    return false;
+}
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

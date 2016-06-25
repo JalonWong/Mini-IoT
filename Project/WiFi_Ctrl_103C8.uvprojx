@@ -328,10 +328,10 @@
             <vShortEn>1</vShortEn>
             <vShortWch>1</vShortWch>
             <VariousControls>
-              <MiscControls>--C99</MiscControls>
-              <Define>USE_HAL_DRIVER,STM32F103xB</Define>
+              <MiscControls>--diag_suppress=177 --diag_suppress=550</MiscControls>
+              <Define>USE_HAL_DRIVER,STM32F103xE,_DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Include;../Drivers/CMSIS/Device/ST/STM32F1xx/Include</IncludePath>
+              <IncludePath>..\HAL\Inc;..\HAL\Drivers/STM32F1xx_HAL_Driver/Inc;..\HAL\Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;..\HAL\Drivers/CMSIS/Include;..\HAL\Drivers/CMSIS/Device/ST/STM32F1xx/Include;..\Source</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -371,6 +371,36 @@
         </TargetArmAds>
       </TargetOption>
       <Groups>
+        <Group>
+          <GroupName>Source</GroupName>
+          <Files>
+            <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>html.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\html.c</FilePath>
+            </File>
+            <File>
+              <FileName>esp8266.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\esp8266.c</FilePath>
+            </File>
+            <File>
+              <FileName>http.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\http.c</FilePath>
+            </File>
+            <File>
+              <FileName>control.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\control.c</FilePath>
+            </File>
+          </Files>
+        </Group>
         <Group>
           <GroupName>Drivers/STM32F1xx_HAL_Driver</GroupName>
           <Files>

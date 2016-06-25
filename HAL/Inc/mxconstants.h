@@ -41,12 +41,14 @@
 
 /* Private define ------------------------------------------------------------*/
 
-#define CTRL1_Pin GPIO_PIN_13
-#define CTRL1_GPIO_Port GPIOC
 #define ESP_EN_Pin GPIO_PIN_1
 #define ESP_EN_GPIO_Port GPIOA
 #define LED_Pin GPIO_PIN_0
 #define LED_GPIO_Port GPIOB
+#define CTRL2_Pin GPIO_PIN_14
+#define CTRL2_GPIO_Port GPIOB
+#define CTRL1_Pin GPIO_PIN_15
+#define CTRL1_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
