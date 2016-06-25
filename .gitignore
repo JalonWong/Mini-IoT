@@ -1,0 +1,4 @@
+Project/*
+!Project/*.uvprojx
+!Project/RAM.ini
+Project*_copy

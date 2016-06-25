@@ -1,0 +1,3 @@
+.mxproject
+MDK-ARM/*
+!MDK-ARM/*.s
