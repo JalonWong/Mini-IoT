@@ -9,6 +9,6 @@ typedef struct {
     u16 len;
 }HtmlData_Type;
 
-HtmlData_Type* HTML_Find(char* name);
+HtmlData_Type* HTML_Find(const char* name, u16 name_len);
 
 #endif

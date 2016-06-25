@@ -55,26 +55,17 @@ HTTPHead_Type* HTTP_FindHead(u16 id)
     return NULL;
 }
 
-bool HTTP_SendPage(u8 con_id, u16 head_id, char* name)
+bool HTTP_SendPage(u8 con_id, u16 head_id, const u8* data, u16 len)
 {
-    u16 len = 0;
     HTTPHead_Type *head = HTTP_FindHead(head_id);
-    HtmlData_Type *page = HTML_Find(name);
     
     if(!head) return false;
     
-    if(page)
-    {
-        len = page->len;
-    }
     
     if(ESP8266_SendConDataBegin(con_id, len + head->len))
     {
         ESP8266_SendData(head->data, head->len);
-        if(page)
-        {
-            ESP8266_SendData(page->data, page->len);
-        }
+        ESP8266_SendData(data, len);
         ESP8266_SendConDataEnd();
         return true;
     }
@@ -91,13 +82,14 @@ bool HTTP_LineHandler(u8 con_id, char* str, u16 len)
 {
     char* p_path, *p_cmd;
     char* p_http = strstr(str, " HTTP/1.1");
+    char* name;
     u16 path_len, cmd_len;
     
     if(len > 13 && memcmp(str, "GET ", 4) == 0 
         && p_http
         && str[4] == '/')
     {
-        p_path = str + 4;
+        p_path = str + 5;
         *p_http = 0;
         
         // 查找是否带参数
@@ -124,13 +116,20 @@ bool HTTP_LineHandler(u8 con_id, char* str, u16 len)
         HAL_Delay(100);
         
         // 路径处理
-        if(path_len > 1)
+        if(path_len == 0)
         {
-            HTTP_SendPage(con_id, 404, NULL);
+            p_path = "index.html";
+            path_len = 10;
+        }
+        
+        HtmlData_Type *page = HTML_Find(p_path, path_len);
+        if(page)
+        {
+            HTTP_SendPage(con_id, 200, page->data, page->len);
         }
         else
         {
-            HTTP_SendPage(con_id, 200, "index.html");
+            HTTP_SendPage(con_id, 404, NULL, 0);
         }
 
         HAL_Delay(100);

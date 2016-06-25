@@ -36,7 +36,7 @@ HtmlData_Type HtmlData[] = {
     {"404.html", _404_html, sizeof(_404_html)},
 };
 
-HtmlData_Type* HTML_Find(char* name)
+HtmlData_Type* HTML_Find(const char* name, u16 name_len)
 {
     u8 i;
     
@@ -44,7 +44,7 @@ HtmlData_Type* HTML_Find(char* name)
     
     for(i=0; i<sizeof(HtmlData)/sizeof(HtmlData[0]); i++)
     {
-        if(strcmp(HtmlData[i].name, name) == 0)
+        if(memcmp(HtmlData[i].name, name, name_len) == 0)
         {
             return &HtmlData[i];
         }
