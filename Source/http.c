@@ -64,7 +64,7 @@ bool HTTP_SendPage(u8 con_id, u16 head_id, const u8* data, u16 len)
     
     if(ESP8266_SendConDataBegin(con_id, len + head->len))
     {
-        HAL_Delay(1);
+        HAL_Delay(10);
         ESP8266_SendData(head->data, head->len);
         ESP8266_SendData(data, len);
         return ESP8266_SendConDataEnd();
